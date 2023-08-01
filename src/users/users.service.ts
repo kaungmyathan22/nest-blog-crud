@@ -32,11 +32,16 @@ export class UsersService {
   findAll() {
     return `This action returns all users`;
   }
-
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async getById(id: number) {
+    const user = await this.usersRepository.findOne({ where: { id } });
+    if (user) {
+      return user;
+    }
+    throw new HttpException(
+      'User with this id does not exist',
+      HttpStatus.NOT_FOUND,
+    );
   }
-
   update(id: number, updateUserDto: UpdateUserDto) {
     return `This action updates a #${id} user`;
   }
