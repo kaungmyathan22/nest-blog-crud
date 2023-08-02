@@ -1,12 +1,15 @@
 import {
   Body,
+  ClassSerializerInterceptor,
   Controller,
   Get,
   HttpCode,
   Post,
   Req,
   Res,
+  SerializeOptions,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { Response } from 'express';
 import { AuthenticationService } from './authentication.service';
@@ -16,6 +19,10 @@ import { LocalAuthenticationGuard } from './guards/local-authentication.guard';
 import RequestWithUser from './interfaces/requestWithUser.interface';
 
 @Controller('authentication')
+@UseInterceptors(ClassSerializerInterceptor)
+@SerializeOptions({
+  strategy: 'excludeAll',
+})
 export class AuthenticationController {
   constructor(private readonly authenticationService: AuthenticationService) {}
 
@@ -23,7 +30,7 @@ export class AuthenticationController {
   @Get('me')
   me(@Req() request: RequestWithUser) {
     const user = request.user;
-    user.password = undefined;
+    // user.password = undefined;
     return user;
   }
 
