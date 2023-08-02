@@ -23,7 +23,6 @@ export class AuthenticationController {
   @Get('me')
   me(@Req() request: RequestWithUser) {
     const user = request.user;
-    // user.password = undefined;
     return user;
   }
 
@@ -41,7 +40,6 @@ export class AuthenticationController {
       user.id,
     );
     response.setHeader('Set-Cookie', cookie);
-    user.password = undefined;
     return response.send(user);
   }
 
