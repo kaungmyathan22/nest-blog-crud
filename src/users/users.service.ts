@@ -43,7 +43,6 @@ export class UsersService {
     return `This action returns all users`;
   }
   async getById(id: any) {
-    console.log({ id });
     const user = await this.usersRepository.findOne({ where: { id } });
     if (user) {
       return user;

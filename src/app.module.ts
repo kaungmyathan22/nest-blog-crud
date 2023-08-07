@@ -8,6 +8,7 @@ import { DatabaseModule } from './database/database.module';
 import { FilesModule } from './files/files.module';
 import { PostModule } from './post/post.module';
 import { UsersModule } from './users/users.module';
+import { SearchModule } from './search/search.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { UsersModule } from './users/users.module';
     UsersModule,
     AuthenticationModule,
     FilesModule,
+    SearchModule,
   ],
   controllers: [AppController],
   providers: [AppService],

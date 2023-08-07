@@ -23,7 +23,6 @@ export class FilesService {
         Key: `${uuid()}-${filename}`,
       })
       .promise();
-    console.log({ uploadResult });
     const newFile = this.publicFilesRepository.create({
       key: uploadResult.Key,
       url: uploadResult.Location,

@@ -1,10 +1,12 @@
 lockfileVersion: 5.4
 
 specifiers:
+  '@elastic/elasticsearch': ^7.9.0
   '@nestjs/cli': ^9.0.0
   '@nestjs/common': ^9.0.0
   '@nestjs/config': ^3.0.0
   '@nestjs/core': ^9.0.0
+  '@nestjs/elasticsearch': ^7.1.0
   '@nestjs/jwt': ^10.1.0
   '@nestjs/mapped-types': '*'
   '@nestjs/passport': ^10.0.0
@@ -53,9 +55,11 @@ specifiers:
   uuid: ^9.0.0
 
 dependencies:
+  '@elastic/elasticsearch': 7.17.12
   '@nestjs/common': 9.4.3_j3td4gnlgk75ora6o6suo62byy
   '@nestjs/config': 3.0.0_dk4u2lifzsfgc7wmi6hz7mkv5a
   '@nestjs/core': 9.4.3_c4fgdp752ib7dsgrlnt7fswfce
+  '@nestjs/elasticsearch': 7.1.0_t5iekeios3sp7y65rv6kgplise
   '@nestjs/jwt': 10.1.0_@nestjs+common@9.4.3
   '@nestjs/mapped-types': 2.0.2_i7luks5ses66diusqohyeqc2yi
   '@nestjs/passport': 10.0.0_swdehgqxw2nt4jhhnqbb6yp354
@@ -548,6 +552,18 @@ packages:
     dependencies:
       '@jridgewell/trace-mapping': 0.3.9
 
+  /@elastic/elasticsearch/7.17.12:
+    resolution: {integrity: sha512-iypJDSzlnA1dXcw6H77qy0pH1Et8Nrw/TA6UHA7ECjKwZ9iBxZKS3WgOX0KgtL6GWdmTQWhGEha7k+ELVHygjQ==}
+    engines: {node: '>=12'}
+    dependencies:
+      debug: 4.3.4
+      hpagent: 0.1.2
+      ms: 2.1.3
+      secure-json-parse: 2.7.0
+    transitivePeerDependencies:
+      - supports-color
+    dev: false
+
   /@eslint-community/eslint-utils/4.4.0_eslint@8.43.0:
     resolution: {integrity: sha512-1/sA4dwrzBAyeUoQ6oxahHKmrZvsnLCg4RfxW3ZFGGmQkSNQPFNLV9CUEFQP1x9EYXHTo5p6xdhZM1Ne9p/AfA==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
@@ -1015,6 +1031,18 @@ packages:
       uid: 2.0.2
     transitivePeerDependencies:
       - encoding
+
+  /@nestjs/elasticsearch/7.1.0_t5iekeios3sp7y65rv6kgplise:
+    resolution: {integrity: sha512-3ixmu9MkTh0DS+LKAKcWHLyf/1DPQTXoy+aVClVI14DJQU208oHR3V0e9klApC+GXCYW+BDhNReh4HRyekjTrw==}
+    peerDependencies:
+      '@elastic/elasticsearch': ^7.4.0
+      '@nestjs/common': ^6.0.0 || ^7.0.0
+      rxjs: ^6.2.1
+    dependencies:
+      '@elastic/elasticsearch': 7.17.12
+      '@nestjs/common': 9.4.3_j3td4gnlgk75ora6o6suo62byy
+      rxjs: 7.8.1
+    dev: false
 
   /@nestjs/jwt/10.1.0_@nestjs+common@9.4.3:
     resolution: {integrity: sha512-iLwCGS25ybUxGS7i5j/Mwuyzvp/WxJftHlm8aLEBv5GV92apz6L1QVjxLdZrqXbzo++C8gdJauhzil8qitY+6w==}
@@ -3237,6 +3265,10 @@ packages:
     resolution: {integrity: sha512-tzcUFauisWKNHaRkN4Wjl/ZA07gENAjFl3J/c480dprkGTg5EQstgaNFqBfUqCq54kZRIEcreTsAgF/m2quD7A==}
     dev: false
 
+  /hpagent/0.1.2:
+    resolution: {integrity: sha512-ePqFXHtSQWAFXYmj+JtOTHr84iNrII4/QRlAAPPE+zqnKy4xJo7Ie1Y4kC7AdB+LxLxSTTzBMASsEcy0q8YyvQ==}
+    dev: false
+
   /html-escaper/2.0.2:
     resolution: {integrity: sha512-H2iMtd0I4Mt5eYiapRdIDjp+XzelXQ0tFE4JS7YFwFevXXMmOp9myNrUvCg0D6ws8iqkRPBfKHgbwig1SmlLfg==}
     dev: true
@@ -4977,6 +5009,10 @@ packages:
       ajv: 6.12.6
       ajv-keywords: 3.5.2_ajv@6.12.6
     dev: true
+
+  /secure-json-parse/2.7.0:
+    resolution: {integrity: sha512-6aU+Rwsezw7VR8/nyvKTx8QpWH9FrcYiXXlqC4z5d5XQBDRqtbfsRjnwGyqbi3gddNtWHuEk9OANUotL26qKUw==}
+    dev: false
 
   /semver/6.3.0:
     resolution: {integrity: sha512-b39TBaTSfV6yBrapU89p5fKekE2m/NwnDocOVruQFS1/veMgdzuPcnOM34M6CwxW8jH/lxEa5rBoDeUwu5HHTw==}

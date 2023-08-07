@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   Req,
   UseGuards,
 } from '@nestjs/common';
@@ -18,31 +19,33 @@ import { PostService } from './post.service';
 
 @Controller('post')
 export class PostController {
-  constructor(private readonly postService: PostService) {}
+  constructor(private readonly postsService: PostService) {}
 
   @Post()
   @UseGuards(JwtAuthenticationGuard)
   create(@Body() createPostDto: CreatePostDto, @Req() req: RequestWithUser) {
-    return this.postService.createPost(createPostDto, req.user);
+    return this.postsService.createPost(createPostDto, req.user);
   }
-
   @Get()
-  findAll() {
-    return this.postService.getAllPosts();
+  async getPosts(@Query('search') search: string) {
+    if (search) {
+      return this.postsService.searchForPosts(search);
+    }
+    return this.postsService.getAllPosts();
   }
 
   @Get(':id')
   findOne(@Param() { id }: FindOneParams) {
-    return this.postService.getPostById(+id);
+    return this.postsService.getPostById(+id);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto) {
-    return this.postService.updatePost(+id, updatePostDto);
+    return this.postsService.updatePost(+id, updatePostDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.postService.deletePost(+id);
+    return this.postsService.deletePost(+id);
   }
 }
