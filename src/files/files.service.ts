@@ -4,7 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { S3 } from 'aws-sdk';
 import { Repository } from 'typeorm';
 import { v4 as uuid } from 'uuid';
-import PublicFile from './entities/file.entity';
+import PublicFile from './entities/publicFile.entity';
 
 @Injectable()
 export class FilesService {
@@ -23,7 +23,7 @@ export class FilesService {
         Key: `${uuid()}-${filename}`,
       })
       .promise();
-
+    console.log({ uploadResult });
     const newFile = this.publicFilesRepository.create({
       key: uploadResult.Key,
       url: uploadResult.Location,
