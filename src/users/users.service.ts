@@ -1,6 +1,13 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FilesService } from 'src/files/files.service';
+import { PrivateFilesService } from 'src/files/privateFile.service';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -12,6 +19,7 @@ export class UsersService {
     @InjectRepository(UserEntity)
     private usersRepository: Repository<UserEntity>,
     private readonly filesService: FilesService,
+    private readonly privateFilesService: PrivateFilesService,
   ) {}
 
   async getByEmail(email: string) {
@@ -34,7 +42,8 @@ export class UsersService {
   findAll() {
     return `This action returns all users`;
   }
-  async getById(id: number) {
+  async getById(id: any) {
+    console.log({ id });
     const user = await this.usersRepository.findOne({ where: { id } });
     if (user) {
       return user;
@@ -76,6 +85,41 @@ export class UsersService {
     }
   }
 
+  async addPrivateFile(userId: number, imageBuffer: Buffer, filename: string) {
+    return this.privateFilesService.uploadPrivateFile(
+      imageBuffer,
+      userId,
+      filename,
+    );
+  }
+
+  async getPrivateFile(userId: number, fileId: number) {
+    const file = await this.privateFilesService.getPrivateFile(fileId);
+    if (file.info.owner.id === userId) {
+      return file;
+    }
+    throw new UnauthorizedException();
+  }
+  async getAllPrivateFiles(userId: number) {
+    const userWithFiles = await this.usersRepository.findOne({
+      where: { id: userId },
+      relations: ['files'],
+    });
+    if (userWithFiles) {
+      return Promise.all(
+        userWithFiles.files.map(async (file) => {
+          const url = await this.privateFilesService.generatePresignedUrl(
+            file.key,
+          );
+          return {
+            ...file,
+            url,
+          };
+        }),
+      );
+    }
+    throw new NotFoundException('User with this id does not exist');
+  }
   update(id: number, updateUserDto: UpdateUserDto) {
     return `This action updates a #${id} user`;
   }
