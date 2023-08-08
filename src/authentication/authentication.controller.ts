@@ -5,10 +5,8 @@ import {
   HttpCode,
   Post,
   Req,
-  Res,
   UseGuards,
 } from '@nestjs/common';
-import { Response } from 'express';
 import { UsersService } from 'src/users/users.service';
 import { AuthenticationService } from './authentication.service';
 import RegisterDto from './dto/register.dto';
@@ -39,13 +37,14 @@ export class AuthenticationController {
   @HttpCode(200)
   @UseGuards(LocalAuthenticationGuard)
   @Post('log-in')
-  async logIn(@Req() request: RequestWithUser, @Res() response: Response) {
+  async logIn(@Req() request: RequestWithUser) {
     const { user } = request;
     const accessTokenCookie =
       this.authenticationService.getCookieWithJwtAccessToken(user.id);
     const refreshTokenCookie =
       this.authenticationService.getCookieWithJwtRefreshToken(user.id);
-
+    // delete user.password;
+    // delete user.currentHashedRefreshToken;
     await this.usersService.setCurrentRefreshToken(
       refreshTokenCookie.token,
       user.id,
@@ -61,7 +60,7 @@ export class AuthenticationController {
   @HttpCode(200)
   @UseGuards(JwtAuthenticationGuard)
   @Post('log-out')
-  async logOut(@Req() request: RequestWithUser, @Res() response: Response) {
+  async logOut(@Req() request: RequestWithUser) {
     await this.usersService.removeRefreshToken(request.user.id);
     request.res.setHeader(
       'Set-Cookie',

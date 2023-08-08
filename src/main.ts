@@ -18,7 +18,7 @@ async function bootstrap() {
       whitelist: true,
       // forbidUnknownValues: true,
       transform: true,
-      // skipMissingProperties: true,
+      skipMissingProperties: true,
     }),
   );
   const configService = app.get(ConfigService);
