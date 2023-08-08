@@ -43,8 +43,6 @@ export class AuthenticationController {
       this.authenticationService.getCookieWithJwtAccessToken(user.id);
     const refreshTokenCookie =
       this.authenticationService.getCookieWithJwtRefreshToken(user.id);
-    // delete user.password;
-    // delete user.currentHashedRefreshToken;
     await this.usersService.setCurrentRefreshToken(
       refreshTokenCookie.token,
       user.id,
