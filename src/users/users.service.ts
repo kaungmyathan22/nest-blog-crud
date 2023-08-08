@@ -6,6 +6,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import * as bcrypt from 'bcrypt';
 import { FilesService } from 'src/files/files.service';
 import { PrivateFilesService } from 'src/files/privateFile.service';
 import { Repository } from 'typeorm';
@@ -42,6 +43,7 @@ export class UsersService {
   findAll() {
     return `This action returns all users`;
   }
+
   async getById(id: any) {
     const user = await this.usersRepository.findOne({ where: { id } });
     if (user) {
@@ -72,6 +74,7 @@ export class UsersService {
   async deleteAvatar(userId: number) {
     await this.removeAvatar(userId);
   }
+
   async removeAvatar(userId: number) {
     const user = await this.getById(userId);
     const fileId = user.avatar?.id;
@@ -99,6 +102,7 @@ export class UsersService {
     }
     throw new UnauthorizedException();
   }
+
   async getAllPrivateFiles(userId: number) {
     const userWithFiles = await this.usersRepository.findOne({
       where: { id: userId },
@@ -119,11 +123,37 @@ export class UsersService {
     }
     throw new NotFoundException('User with this id does not exist');
   }
+
   update(id: number, updateUserDto: UpdateUserDto) {
     return `This action updates a #${id} user`;
   }
 
   remove(id: number) {
     return `This action removes a #${id} user`;
+  }
+
+  async setCurrentRefreshToken(refreshToken: string, userId: number) {
+    const currentHashedRefreshToken = await bcrypt.hash(refreshToken, 10);
+    await this.usersRepository.update(userId, {
+      currentHashedRefreshToken,
+    });
+  }
+  async getUserIfRefreshTokenMatches(refreshToken: string, userId: number) {
+    const user = await this.getById(userId);
+
+    const isRefreshTokenMatching = await bcrypt.compare(
+      refreshToken,
+      user.currentHashedRefreshToken,
+    );
+
+    if (isRefreshTokenMatching) {
+      return user;
+    }
+  }
+
+  async removeRefreshToken(userId: number) {
+    return this.usersRepository.update(userId, {
+      currentHashedRefreshToken: null,
+    });
   }
 }
