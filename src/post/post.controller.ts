@@ -14,6 +14,7 @@ import JwtAuthenticationGuard from 'src/authentication/guards/jwt-authentication
 import RequestWithUser from 'src/authentication/interfaces/requestWithUser.interface';
 import { FindOneParams } from 'src/utils/find-one-params';
 import { CreatePostDto } from './dto/create-post.dto';
+import { PaginationParams } from './dto/pagination-params.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { PostService } from './post.service';
 
@@ -27,11 +28,14 @@ export class PostController {
     return this.postsService.createPost(createPostDto, req.user);
   }
   @Get()
-  async getPosts(@Query('search') search: string) {
+  async getPosts(
+    @Query('search') search: string,
+    @Query() { offset, limit }: PaginationParams,
+  ) {
     if (search) {
-      return this.postsService.searchForPosts(search);
+      return this.postsService.searchForPosts(search, offset, limit);
     }
-    return this.postsService.getAllPosts();
+    return this.postsService.getAllPosts(offset, limit);
   }
 
   @Get(':id')
